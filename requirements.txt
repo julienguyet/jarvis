@@ -7,3 +7,5 @@ langchain-huggingface
 langchain
 langchain-community
 torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+streamlit
+streamlit-audiorec
