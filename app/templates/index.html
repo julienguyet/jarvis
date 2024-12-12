@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Assistant</h1>
+            <p>Speak to the assistant and receive intelligent responses!</p>
+        </header>
+        
+        <main>
+            <div id="controls">
+                <button id="record-btn">🎙 Start Recording</button>
+                <button id="stop-btn" disabled>⏹ Stop Recording</button>
+            </div>
+            <div id="status">Press "Start Recording" to begin.</div>
+            
+            <section id="conversation">
+                <h2>Conversation</h2>
+                <div id="transcript">
+                    <p><strong>You:</strong> <span id="user-text">...</span></p>
+                    <p><strong>Assistant:</strong> <span id="assistant-text">...</span></p>
+                </div>
+            </section>
+            
+            <div id="response-audio-container">
+                <audio id="response-audio" controls></audio>
+            </div>
+        </main>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="/static/app.js?v=1"></script>
+</body>
+</html>

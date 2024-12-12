@@ -1,0 +1,8 @@
+Flask
+torch
+transformers
+langchain_huggingface
+datasets
+soundfile
+sentencepiece 
+git+https://github.com/huggingface/parler-tts.git
