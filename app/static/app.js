@@ -1,20 +1,30 @@
 let mediaRecorder;
 let audioChunks = [];
 
+// Initialize DOM elements after the page loads
 document.addEventListener("DOMContentLoaded", () => {
     const recordBtn = document.getElementById("record-btn");
     const stopBtn = document.getElementById("stop-btn");
     const status = document.getElementById("status");
-    const userText = document.getElementById("user-text");
-    const assistantText = document.getElementById("assistant-text");
     const responseAudio = document.getElementById("response-audio");
+    const userMessageInput = document.getElementById("user-message");
+    const sendBtn = document.getElementById("send-btn");
+    const transcript = document.getElementById("transcript");
 
-    // Update status message
+    // Helper function: Update the status message
     function updateStatus(message) {
         status.innerText = message;
     }
 
-    // Start recording
+    // Helper function: Add message to the conversation history
+    function addToTranscript(role, text) {
+        const messageElement = document.createElement("p");
+        messageElement.innerHTML = `<strong>${role}:</strong> ${text}`;
+        transcript.appendChild(messageElement);
+        transcript.scrollTop = transcript.scrollHeight; // Auto-scroll to the latest message
+    }
+
+    // Audio interaction: Start recording
     recordBtn.addEventListener("click", () => {
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
@@ -35,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // Stop recording
+    // Audio interaction: Stop recording
     stopBtn.addEventListener("click", () => {
         if (!mediaRecorder) {
             console.error("No active recorder found!");
@@ -51,25 +61,58 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append("audio", audioBlob);
 
             fetch("/process_audio", { method: "POST", body: formData })
-                .then(response => response.blob())
-                .then(blob => {
-                    const audioURL = URL.createObjectURL(blob);
-                    responseAudio.src = audioURL;
+                .then(response => response.json())
+                .then(data => {
+                    const { user_text, assistant_text, audio_url } = data;
 
-                    // Update status
+                    // Update transcript and play audio
+                    addToTranscript("You", user_text);
+                    addToTranscript("Assistant", assistant_text);
+                    responseAudio.src = audio_url;
+                    responseAudio.play();
+
+                    // Reset UI
                     updateStatus("Response ready. Play the audio below.");
                     recordBtn.disabled = false;
-
-                    // Placeholder for transcript update
-                    userText.innerText = "Your input text here.";
-                    assistantText.innerText = "AI assistant's response here.";
+                    stopBtn.disabled = true;
                 })
                 .catch(err => {
                     console.error("Error processing audio:", err);
                     updateStatus("An error occurred. Please try again.");
                 });
-
-            stopBtn.disabled = true;
         };
+    });
+
+    // Text interaction: Send message
+    sendBtn.addEventListener("click", () => {
+        const userMessage = userMessageInput.value.trim();
+        if (!userMessage) {
+            updateStatus("Please type a message before sending.");
+            return;
+        }
+
+        // Add user's message to transcript and clear input field
+        addToTranscript("You", userMessage);
+        userMessageInput.value = "";
+        updateStatus("Processing your message...");
+
+        // Ensure the key is 'message' instead of 'text' when sending data to the server
+        fetch("/process_chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userMessage })  // changed 'text' to 'message'
+        })
+            .then(response => response.json())
+            .then(data => {
+                const { assistant_text } = data;
+
+                // Add assistant's response to transcript
+                addToTranscript("Assistant", assistant_text);
+                updateStatus("Response received.");
+            })
+            .catch(err => {
+                console.error("Error processing text:", err);
+                updateStatus("An error occurred. Please try again.");
+            });
     });
 });
