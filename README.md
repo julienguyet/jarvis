@@ -27,6 +27,8 @@ Once this is done, clone the repository and install requirements:
 pip install -r requirements.txt
 ```
 
+**Note**: if you are on MaOs, follow the instruction from the [official documentation](https://developer.apple.com/metal/pytorch/) on how to install Pytorch with Metal.
+
 Finally, you will need to install the [ffmpeg package](https://en.wikipedia.org/wiki/FFmpeg) so your system can manage audio files. The easiest way to do so is by running (within your virtual environment):
 
 ```
