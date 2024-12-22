@@ -8,7 +8,7 @@ from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from huggingface_hub import login
 
 # Login to Hugging Face
-login(token='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')
+login(token='YOUR_TOKEN_HERE')
 
 dashline = '---' * 20
 
