@@ -52,8 +52,10 @@ python app.py
 
 The very first start might take time as the models must be installed locally. Once it is done, you will see:
 
-[terminal](https://github.com/user-attachments/assets/6e3872a4-f0af-4f6f-bfbe-6399ac686772)
+![terminal](https://github.com/user-attachments/assets/6e3872a4-f0af-4f6f-bfbe-6399ac686772)
 
 Go the given URL to access the web app:
 
 ![jarvis_new_home](https://github.com/user-attachments/assets/6e3872a4-f0af-4f6f-bfbe-6399ac686772)
+
+And that's it! The chat is yours to use. If you prefer, you can also record an audio and Jarvis will talk back to you!
