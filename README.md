@@ -7,6 +7,8 @@ Jarvis is a personal assitant which can be run locally. :rocket:
 
 This project is an illustration on how AI can today be made accessible to anyone, for free, while respecting data privacy (the data is saved on your machine and you're the only one to have access to it).
 
+The system prompt can be edited to make the AI tailored to your needs. In my case, Jarvis is an expert in Machine Learning.
+
 Jarvis is powered by **Llama 3.2** :llama: for conversation handling, while **Whisper** and **Parler** handle audio :loud_sound:
 
 Note: all models have been chosen to fit on tiny GPUs. That said, for good results I highly recommend a machine with 16GB of RAM minimum. If you have more, feel free to explore more advanced models on the [Hugging Face Hub](https://huggingface.co/models)
