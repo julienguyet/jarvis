@@ -45,7 +45,7 @@ parler = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tt
 tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-v1.1")
 description_tokenizer = AutoTokenizer.from_pretrained(parler.config.text_encoder._name_or_path)
 
-# Voice description
+
 description = (
     "A male speaker delivers a slightly expressive and animated speech with a "
     "moderate speed and pitch. The recording is of very high quality, with the "
@@ -66,86 +66,82 @@ def index():
 
 @app.route("/process_audio", methods=["POST"])
 def process_audio():
-    # Access the session memory for conversation history
+
     conversation_history = session['conversation_history']
 
-    # Save uploaded audio
+
     audio_file = request.files["audio"]
     audio_path = "uploaded_audio.wav"
     audio_file.save(audio_path)
 
-    # Transcribe audio
+
     print(dashline)
     print("Processing audio with Whisper...")
     transcription = whisper_pipe(audio_path)["text"]
     print(f"User said: {transcription}")
     print(dashline)
 
-    # Update conversation history
+
     conversation_history.append(("human", transcription))
 
-    # Generate chatbot response
+
     llama_response = llama.invoke(conversation_history)
     jarvis_answer = llama_response.content
     print(f"Jarvis response: {jarvis_answer}")
     conversation_history.append(("assistant", jarvis_answer))
     print(dashline)
 
-    # Save the updated conversation history back to the session
+
     session['conversation_history'] = conversation_history
 
-    # Generate audio reply
+
     print("Generating audio reply...")
     input_ids = description_tokenizer(description, return_tensors="pt").input_ids.to(device)
     prompt_input_ids = tokenizer(jarvis_answer, return_tensors="pt").input_ids.to(device)
     generation = parler.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
     audio_arr = generation.cpu().numpy().squeeze()
 
-    # Save response audio to file in the static directory
-    response_audio_file = "static/response_audio.wav"  # Change path to static folder
+
+    response_audio_file = "static/response_audio.wav"
     sf.write(response_audio_file, audio_arr, parler.config.sampling_rate)
     print(f"Audio reply saved to {response_audio_file}")
     print(dashline)
 
-    # Return the audio file URL (relative to the static directory)
+
     return {"audio_url": "/static/response_audio.wav"}
 
 
 @app.route("/process_chat", methods=["POST"])
 def process_chat():
-    # Access the session memory for conversation history
+
     conversation_history = session['conversation_history']
 
-    # Get the user's message from the request (expecting 'message' as the key)
-    user_message = request.json.get("message")  # changed 'text' to 'message'
+
+    user_message = request.json.get("message")
     print(f"User message: {user_message}")
     
     if not user_message:
         return {"error": "No message provided"}, 400
 
-    # Append user's message to the conversation history
+
     conversation_history.append(("human", user_message))
 
-    # Print the conversation history before invoking the model
+
     print("Conversation history before LLM response:")
     print(conversation_history)
 
     try:
-        # Generate the assistant's response
         llama_response = llama.invoke(conversation_history)
         jarvis_answer = llama_response.content
         print(f"Jarvis response: {jarvis_answer}")
     except Exception as e:
         print(f"Error during Llama response generation: {e}")
         return {"error": "Failed to generate response from the assistant"}, 500
-    
-    # Append the assistant's response to conversation history
+
     conversation_history.append(("assistant", jarvis_answer))
 
-    # Save the updated conversation history back to the session
     session['conversation_history'] = conversation_history
 
-    # Return the assistant's reply in the expected format
     return {"assistant_text": jarvis_answer}
 
 
