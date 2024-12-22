@@ -3,13 +3,15 @@
 
 Hello there :wave:
 
-Jarvis is a personal assitant which can be run locally. 
+Jarvis is a personal assitant which can be run locally. :rocket:
 
 This project is an illustration on how AI can today be made accessible to anyone, for free, while respecting data privacy (the data is saved on your machine and you're the only one to have access to it).
 
-The only limitation might be your GPU: for good results I highly recommend a machine with 16GB of RAM minimum. If you have more, well... :rocket:
+Jarvis is powered by **Llama 3.2** :llama: for conversation handling, while **Whisper** and **Parler** handle audio :loud_sound:
 
-## Dependencies :hammer_and_wrench:
+Note: all models have been chosen to fit on tiny GPUs. That said, for good results I highly recommend a machine with 16GB of RAM minimum. If you have more, feel free to explore more advanced models on the [Hugging Face Hub](https://huggingface.co/models)
+
+## 1. Dependencies :hammer_and_wrench:
 ---
 
 To get started, follow the below instructions. 
@@ -33,8 +35,21 @@ conda install -c conda-forge ffmpeg
 
 When done, please move to step 2. 
 
-You should see the [web app](https://github.com/user-attachments/assets/99b5a970-e3c0-4dbd-8d8b-8f857c97cfd2).
+## 2. Run the Application :technologist:
+---
 
-[jarvis_llama](https://github.com/user-attachments/assets/7f759355-6211-459f-a09f-7126f0998856)
+At the root of the directory open the app.py file and add your hugging face [token](https://huggingface.co/docs/hub/security-tokens) on line 11:
 
-![jarvis_start](https://github.com/user-attachments/assets/6e3872a4-f0af-4f6f-bfbe-6399ac686772)
+```python
+login(token='YOUR_TOKEN_HERE')
+```
+
+Then, in your terminal run:
+
+```
+python app.py
+```
+
+The very first start might take time as the models must be installed locally. Once it is done, you will see:
+
+https://github.com/user-attachments/assets/6e3872a4-f0af-4f6f-bfbe-6399ac686772
