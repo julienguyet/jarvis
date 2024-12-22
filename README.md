@@ -52,7 +52,7 @@ python app.py
 
 The very first start might take time as the models must be installed locally. Once it is done, you will see:
 
-![terminal](https://github.com/user-attachments/assets/6e3872a4-f0af-4f6f-bfbe-6399ac686772)
+![terminal](https://github.com/user-attachments/assets/882a7f38-019f-4a90-8ea1-ba91803acc45)
 
 Go the given URL to access the web app:
 
